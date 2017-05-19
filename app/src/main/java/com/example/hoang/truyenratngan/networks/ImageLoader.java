@@ -37,6 +37,7 @@ public class ImageLoader extends AsyncTask<String, Void, Bitmap> {
 
     public void loadImage(String urlString){
         if (!urlString.equals(imageTag)) {
+            imageView.setScaleType(ImageView.ScaleType.CENTER);
             imageView.setImageResource(R.drawable.progress_animation);
             execute(urlString);
         }
@@ -65,6 +66,7 @@ public class ImageLoader extends AsyncTask<String, Void, Bitmap> {
     @Override
     protected void onPostExecute(Bitmap bitmap) {
         if (bitmap != null) {
+            imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
             imageView.setImageBitmap(bitmap);
             imageView.setTag(urlString);
         }

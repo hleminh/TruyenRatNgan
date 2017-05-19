@@ -4,11 +4,20 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.hoang.truyenratngan.StoryListActivity">
+    tools:context="com.example.hoang.truyenratngan.MainActivity">
 
-    <ListView
-        android:id="@+id/lv_storylist"
+    <!--<ListView-->
+        <!--android:id="@+id/lv_storylist"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent" />-->
+
+    <FrameLayout
+        android:id="@+id/fl_main"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent">
+
+
+
+    </FrameLayout>
 
 </RelativeLayout>

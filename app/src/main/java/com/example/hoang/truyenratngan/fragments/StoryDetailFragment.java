@@ -1,39 +1,55 @@
-package com.example.hoang.truyenratngan;
+package com.example.hoang.truyenratngan.fragments;
 
-import android.content.Intent;
-import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
+
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
+import com.example.hoang.truyenratngan.R;
+import com.example.hoang.truyenratngan.StoryApplication;
 import com.example.hoang.truyenratngan.adapters.ChapterAdapter;
 import com.example.hoang.truyenratngan.databases.models.DaoMaster;
 import com.example.hoang.truyenratngan.databases.models.DaoSession;
 import com.example.hoang.truyenratngan.databases.models.Story;
 import com.example.hoang.truyenratngan.databases.models.StoryDao;
-import com.example.hoang.truyenratngan.pagetransformers.MyPageTransformer;
 
 import org.greenrobot.greendao.database.Database;
 
-import java.util.List;
+/**
+ * A simple {@link Fragment} subclass.
+ */
+public class StoryDetailFragment extends Fragment {
 
-public class StoryDetailActivity extends AppCompatActivity {
     private ViewPager vpChapter;
     private Story story;
     private DaoMaster.DevOpenHelper daoHelper;
     private DaoSession daoSession;
     private Database db;
 
-    @Override
-    protected void onCreate(final Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_story_detail);
+    public StoryDetailFragment() {
+        // Required empty public constructor
+    }
 
+    public StoryDetailFragment setStory(Story story) {
+        this.story = story;
+        return this;
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        View view =  inflater.inflate(R.layout.fragment_story_detail, container, false);
+        vpChapter = (ViewPager)view.findViewById(R.id.vp_chapter);
         daoHelper = StoryApplication.getInstance().getDaoHelper();
         db = daoHelper.getWritableDb();
         daoSession = new DaoMaster(db).newSession();
 
-        vpChapter = (ViewPager) findViewById(R.id.vp_chapter);
+
         vpChapter.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -52,15 +68,13 @@ public class StoryDetailActivity extends AppCompatActivity {
 
             }
         });
-
-        getStory();
+        //        vpChapter.setPageTransformer(true, new MyPageTransformer());
         setupUI();
-
-        vpChapter.setPageTransformer(true, new MyPageTransformer());
+        return view;
     }
 
     private void setupUI() {
-        vpChapter.setAdapter(new ChapterAdapter(this.getSupportFragmentManager()).setStory(this.story));
+        vpChapter.setAdapter(new ChapterAdapter(this.getFragmentManager()).setStory(this.story));
         Story storyDao = daoSession.getStoryDao().queryBuilder().where(StoryDao.Properties.Id.eq(story.getId())).list().get(0);
         int lastChapterNo = storyDao.getLastChapterNo();
         if (lastChapterNo != -1) {
@@ -70,9 +84,5 @@ public class StoryDetailActivity extends AppCompatActivity {
         daoSession.update(storyDao);
     }
 
-    private void getStory() {
-        Intent intent = getIntent();
-        story = (Story) intent.getSerializableExtra("Story");
-        Log.d("StoryDetailActivity", story.toString());
-    }
+
 }
